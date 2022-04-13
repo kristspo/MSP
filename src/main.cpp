@@ -15,7 +15,7 @@ int main(void)
   // Timer mode: Up to CCR0
   TACTL = TASSEL_2 + ID_3 + MC_1;
   TACCTL0 = CCIE; // CCTL0
-  TACCR0 = 31250; // CCR0
+  TACCR0 = 31250 * 2; // CCR0
 
   // Enter LPM0 with interrupt
   _BIS_SR(CPUOFF + GIE);
