@@ -2,35 +2,24 @@
 #include <msp430.h>
 #include "serial.h"
 
-Serial::Serial() {
-     get = 0;
-     put = 0;
-
-     UCA0CTL1 = (0xC0 | UCSWRST);  // USCI clock source SMCLK
-     UCA0MCTL = 0;            // oversampling disabled
-     UCA0BR0 = 26;
-     UCA0BR1 = 0;
-     P1SEL  = (BIT1 | BIT2); // P1.1 and P1.2 peripheral module function selected
-     P1SEL2 = (BIT1 | BIT2);
-     UCA0CTL1 &= ~UCSWRST; // clear reset bit
-
-     IE2 |= UCA0RXIE;    // USCI recieve interrupt enabled
-
-}
-
-void Serial::output() {
-
-}
-
-#pragma vector = USCIAB0RX_VECTOR
-__interrupt void USCI_RX(void)
+void Serial::put_char(uint8_t ch)
 {
-     UCA0TXBUF = UCA0RXBUF; // reading RX clears UCB0RXIFG
-     P1OUT ^= 0x40;
+    if (length < BUFF_SIZE)
+    {
+        buffer[put] = ch;
+        put = (put + 1) & BUFF_MASK;
+        length++;
+    }
 }
 
-#pragma vector = USCIAB0TX_VECTOR
-__interrupt void USCI_TX(void)
+uint8_t Serial::get_char()
 {
-
+    uint8_t ch = 0;
+    if (length)
+    {
+        ch = buffer[get];
+        get = (get + 1) & BUFF_MASK;
+        length--;
+    }
+    return ch;
 }
