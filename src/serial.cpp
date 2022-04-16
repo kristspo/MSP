@@ -2,7 +2,10 @@
 #include <msp430.h>
 #include "serial.h"
 
-void Serial::put_char(uint8_t ch)
+/**
+ * Put character into buffer. Ignores character if buffer is full.
+ */
+void Buffer::put_char(uint8_t ch)
 {
     if (length < BUFF_SIZE)
     {
@@ -12,7 +15,10 @@ void Serial::put_char(uint8_t ch)
     }
 }
 
-uint8_t Serial::get_char()
+/**
+ * Get character from buffer. Returns 0 if buffer is empty.
+ */
+uint8_t Buffer::get_char()
 {
     uint8_t ch = 0;
     if (length)
