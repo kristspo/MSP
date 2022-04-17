@@ -30,3 +30,14 @@ __interrupt void Timer_A(void)
 {
   P1OUT ^= 0x01 + 0x40; // Toggle P1.0 and P1.6
 }
+
+// USCI interrupts
+#pragma vector = USCIAB0RX_VECTOR
+__interrupt void USCI_RX(void)
+{
+}
+
+#pragma vector = USCIAB0TX_VECTOR
+__interrupt void USCI_TX(void)
+{
+}
